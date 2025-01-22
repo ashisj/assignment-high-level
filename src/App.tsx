@@ -1,12 +1,16 @@
-import './App.css'
+import "./App.css";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 
 function App() {
-
   return (
-    <h1 className="text-3xl font-bold ">
-      Hello world!
-    </h1>
-  )
+      <div className="h-screen flex flex-row">
+        <Sidebar />
+        <div className="flex flex-col flex-1">
+          <Navbar />
+        </div>
+      </div>
+  );
 }
 
-export default App
+export default App;
