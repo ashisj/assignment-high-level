@@ -41,9 +41,11 @@ const ElementButton = ({
 const ElementSection = ({
   title,
   elements,
+  handleElementAdd,
 }: {
   title: string;
   elements: typeof elementConfigs.text;
+  handleElementAdd: (elementType: string) => void;
 }) => (
   <div className="space-y-2">
     <h3 className="text-sm font-medium mb-2">{title}</h3>
@@ -54,7 +56,8 @@ const ElementSection = ({
         icon={element.icon}
         label={element.label}
         iconClass={element.iconClass}
-        onClick={() => console.log(`${element.id} selected`)}
+        // onClick={() => console.log(`${element.id} selected`)}
+        onClick={() => handleElementAdd(element.id  )}
       />
     ))}
   </div>
@@ -109,12 +112,8 @@ const LayoutCard = ({
   </Button>
 );
 
-function EditorDrawer({
-  isOpen,
-  onClose,
-  drawerType,
-}: EditorDrawerProps) {
-  const { dispatch } = useEditor();
+function EditorDrawer({ isOpen, onClose, drawerType }: EditorDrawerProps) {
+  const { state, dispatch } = useEditor();
 
   const handleSectionAdd = (sectionType: string) => {
     console.log("sectionType", sectionType);
@@ -126,8 +125,41 @@ function EditorDrawer({
   };
 
   const handleRowAdd = (columns: number[]) => {
-    console.log('row added', columns)
+    if (state.selectedIds.sectionId) {
+      dispatch({
+        type: "ADD_ROW",
+        payload: {
+          columns,
+          sectionId: state.selectedIds.sectionId,
+        },
+      });
+    } else {
+      alert("No section selected");
+    }
+    onClose();
   };
+
+  const handleElementAdd = (elementType: string) => {
+    if(state.selectedIds.sectionId && state.selectedIds.rowId && state.selectedIds.columnId) {
+      dispatch({
+        type: "ADD_ELEMENT",
+        payload: {
+          sectionId: state.selectedIds.sectionId,
+          rowId: state.selectedIds.rowId,
+          columnId: state.selectedIds.columnId,
+          element: {
+            id: `${elementType}-${Date.now()}`,
+            type: elementType,
+            content: "",
+          },
+        },
+      });
+    } else {
+      alert("No section selected, row, or column selected");
+    }
+    onClose();
+  };
+
 
   if (!drawerType) return null;
 
@@ -198,21 +230,23 @@ function EditorDrawer({
 
               <TabsContent value="all" className="mt-4">
                 <div className="grid grid-rows-2 gap-4">
-                  <ElementSection title="Text" elements={elementConfigs.text} />
+                  <ElementSection title="Text" elements={elementConfigs.text} handleElementAdd={handleElementAdd} />
                   <ElementSection
                     title="Media"
                     elements={elementConfigs.media}
+                    handleElementAdd={handleElementAdd}
                   />
-                  <ElementSection title="Form" elements={elementConfigs.form} />
+                  <ElementSection title="Form" elements={elementConfigs.form} handleElementAdd={handleElementAdd} />
                   <ElementSection
                     title="Advanced Form"
                     elements={elementConfigs.advanced}
+                    handleElementAdd={handleElementAdd}
                   />
                 </div>
               </TabsContent>
               <TabsContent value="text" className="mt-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <ElementSection title="Text" elements={elementConfigs.text} />
+                  <ElementSection title="Text" elements={elementConfigs.text} handleElementAdd={handleElementAdd} />
                 </div>
               </TabsContent>
               <TabsContent value="media" className="mt-4">
@@ -220,12 +254,13 @@ function EditorDrawer({
                   <ElementSection
                     title="Media"
                     elements={elementConfigs.media}
+                    handleElementAdd={handleElementAdd}
                   />
                 </div>
               </TabsContent>
               <TabsContent value="form" className="mt-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <ElementSection title="Form" elements={elementConfigs.form} />
+                  <ElementSection title="Form" elements={elementConfigs.form} handleElementAdd={handleElementAdd} />
                 </div>
               </TabsContent>
               <TabsContent value="misc" className="mt-4">
@@ -233,9 +268,12 @@ function EditorDrawer({
                   <ElementSection
                     title="Advanced Form"
                     elements={elementConfigs.advanced}
+                    handleElementAdd={handleElementAdd}
                   />
                 </div>
               </TabsContent>
+
+              {/* Add other tab contents as needed */}
             </Tabs>
           </div>
         )}

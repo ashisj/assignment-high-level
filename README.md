@@ -2,6 +2,15 @@
 
 A drag-and-drop website builder that allows users to create websites by adding sections, rows, columns, and various elements.
 
+## Features
+
+- Drag and drop interface
+- Section management
+- Row layouts
+- Column configurations
+- Various element types (text, images, buttons, etc.)
+- Responsive design
+- Live editing
 
 ## Prerequisites
 

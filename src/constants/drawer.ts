@@ -1,6 +1,27 @@
+export const elementTypes = {
+  headline: "headline",
+  subheadline: "subheadline",
+  paragraph: "paragraph",
+  bulletList: "bulletList",
+  image: "image",
+  imagePopup: "imagePopup",
+  video: "video",
+  videoPopup: "videoPopup",
+  audioPlayer: "audioPlayer",
+  button: "button",
+  facebook: "facebook",
+  input: "input",
+  select: "select",
+  textarea: "textarea",
+  checkbox: "checkbox",
+  smsSignup: "smsSignup",
+  billing: "billing",
+};
+
 interface BaseLayout {
   id: string;
   label: string;
+  disabled?: boolean;
 }
 
 export interface RowLayout extends BaseLayout {
@@ -29,42 +50,49 @@ export const sectionLayouts: ContentLayout[] = [
     label: 'Blank Section',
     icon: '-',
     description: 'Full-width blank section'
+
   },
   { 
     id: 'hero',
     label: 'Hero Section',
     icon: '🎯',
-    description: 'Full-width section with background image or color'
+    description: 'Full-width section with background image or color',
+    disabled: true
   },
   {
     id: 'content',
     label: 'Content Section',
     icon: '📄',
-    description: 'Standard content width with padding'
+    description: 'Standard content width with padding',
+    disabled: true
   },
   {
     id: 'feature',
     label: 'Feature Section',
     icon: '✨',
-    description: 'Highlight key features or services'
+    description: 'Highlight key features or services',
+    disabled: true
   },
   {
     id: 'cta',
     label: 'Call to Action',
     icon: '🔔',
-    description: 'Conversion-focused section'
+    description: 'Conversion-focused section',
+    disabled: true
   },
   {
     id: 'gallery',
     label: 'Gallery Section',
     icon: '🖼️',
-    description: 'Display multiple images in a grid'
+    description: 'Display multiple images in a grid',
+    disabled: true
   },
   {
     id: 'testimonial',
     label: 'Testimonial Section',
     icon: '💬',
-    description: 'Show customer reviews and feedback'
+    description: 'Show customer reviews and feedback',
+    disabled: true
   }
 ];
 
@@ -85,40 +113,42 @@ export const columnLayouts: ContentLayout[] = [
     id: 'mixed',
     label: 'Mixed Content',
     icon: '🔄',
-    description: 'Column for mixed content types'
+    description: 'Column for mixed content types',
+    disabled: true
   },
   {
     id: 'form',
     label: 'Form Column',
     icon: '📋',
-    description: 'Column for form elements'
+    description: 'Column for form elements',
+    disabled: true
   }
 ];
 
 export const elementConfigs = {
   text: [
-    { id: 'headline', label: 'Headline', icon: 'H', iconClass: 'font-serif' },
-    { id: 'subheadline', label: 'Sub-headline', icon: 'A', iconClass: 'font-serif' },
-    { id: 'paragraph', label: 'Paragraph', icon: '¶' },
-    { id: 'bullet-list', label: 'Bullet List', icon: '•' },
+    { id: elementTypes.headline, label: 'Headline', icon: 'H', iconClass: 'font-serif' },
+    { id: elementTypes.subheadline, label: 'Sub-headline', icon: 'A', iconClass: 'font-serif' },
+    { id: elementTypes.paragraph, label: 'Paragraph', icon: '¶' },
+    { id: elementTypes.bulletList, label: 'Bullet List', icon: '•' },
   ],
   media: [
-    { id: 'image', label: 'Image', icon: '🖼️' },
-    { id: 'image-popup', label: 'Image Popup', icon: '🖼️' },
-    { id: 'video', label: 'Video', icon: '▶️' },
-    { id: 'video-popup', label: 'Video Popup', icon: '▶️' },
-    { id: 'audio-player', label: 'Audio Player', icon: '🔊' },
+    { id: elementTypes.image, label: 'Image', icon: '🖼️' },
+    { id: elementTypes.imagePopup, label: 'Image Popup', icon: '🖼️' },
+    { id: elementTypes.video, label: 'Video', icon: '▶️' },
+    { id: elementTypes.videoPopup, label: 'Video Popup', icon: '▶️' },
+    { id: elementTypes.audioPlayer, label: 'Audio Player', icon: '🔊' },
   ],
   form: [
-    { id: 'button', label: 'Button', icon: '⬜' },
-    { id: 'facebook', label: 'Facebook Option', icon: 'f' },
-    { id: 'input', label: 'Input', icon: '⬜' },
-    { id: 'select', label: 'Select Box', icon: '☐' },
-    { id: 'textarea', label: 'Text Area', icon: '📝' },
-    { id: 'checkbox', label: 'Checkbox Headline', icon: '☑️' },
+    { id: elementTypes.button, label: 'Button', icon: '⬜' },
+    { id: elementTypes.facebook, label: 'Facebook Option', icon: 'f' },
+    { id: elementTypes.input, label: 'Input', icon: '⬜' },
+    { id: elementTypes.select, label: 'Select Box', icon: '☐' },
+    { id: elementTypes.textarea, label: 'Text Area', icon: '📝' },
+    { id: elementTypes.checkbox, label: 'Checkbox Headline', icon: '☑️' },
   ],
   advanced: [
-    { id: 'sms-signup', label: 'SMS Sign Up', icon: '📱' },
-    { id: 'billing', label: 'Billing Info', icon: '💳' },
+    { id: elementTypes.smsSignup, label: 'SMS Sign Up', icon: '📱' },
+    { id: elementTypes.billing, label: 'Billing Info', icon: '💳' },
   ],
 }; 
