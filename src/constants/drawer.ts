@@ -32,6 +32,10 @@ export interface ContentLayout extends BaseLayout {
   icon: string;
   description: string;
 }
+export interface Element extends BaseLayout {
+  icon: string;
+  iconClass?: string;
+}
 
 export const rowLayouts: RowLayout[] = [
   { id: '1-col', label: '1 Column', cols: [12] },
@@ -45,13 +49,6 @@ export const rowLayouts: RowLayout[] = [
 ];
 
 export const sectionLayouts: ContentLayout[] = [
-  {
-    id: 'blank',
-    label: 'Blank Section',
-    icon: '-',
-    description: 'Full-width blank section'
-
-  },
   { 
     id: 'hero',
     label: 'Hero Section',
@@ -64,7 +61,6 @@ export const sectionLayouts: ContentLayout[] = [
     label: 'Content Section',
     icon: '📄',
     description: 'Standard content width with padding',
-    disabled: true
   },
   {
     id: 'feature',
@@ -101,13 +97,15 @@ export const columnLayouts: ContentLayout[] = [
     id: 'text',
     label: 'Text Column',
     icon: '📝',
-    description: 'Basic text content column'
+    description: 'Basic text content column',
+    disabled: true
   },
   {
     id: 'image',
     label: 'Image Column',
     icon: '🖼️',
-    description: 'Column optimized for images'
+    description: 'Column optimized for images',
+    disabled: true
   },
   {
     id: 'mixed',
@@ -125,7 +123,7 @@ export const columnLayouts: ContentLayout[] = [
   }
 ];
 
-export const elementConfigs = {
+export const elementConfigs: { [key: string]: Element[] } = {
   text: [
     { id: elementTypes.headline, label: 'Headline', icon: 'H', iconClass: 'font-serif' },
     { id: elementTypes.subheadline, label: 'Sub-headline', icon: 'A', iconClass: 'font-serif' },
@@ -134,21 +132,21 @@ export const elementConfigs = {
   ],
   media: [
     { id: elementTypes.image, label: 'Image', icon: '🖼️' },
-    { id: elementTypes.imagePopup, label: 'Image Popup', icon: '🖼️' },
-    { id: elementTypes.video, label: 'Video', icon: '▶️' },
-    { id: elementTypes.videoPopup, label: 'Video Popup', icon: '▶️' },
-    { id: elementTypes.audioPlayer, label: 'Audio Player', icon: '🔊' },
+    { id: elementTypes.imagePopup, label: 'Image Popup', icon: '🖼️', disabled: true },
+    { id: elementTypes.video, label: 'Video', icon: '▶️', disabled: true },
+    { id: elementTypes.videoPopup, label: 'Video Popup', icon: '▶️', disabled: true },
+    { id: elementTypes.audioPlayer, label: 'Audio Player', icon: '🔊', disabled: true },
   ],
   form: [
     { id: elementTypes.button, label: 'Button', icon: '⬜' },
-    { id: elementTypes.facebook, label: 'Facebook Option', icon: 'f' },
-    { id: elementTypes.input, label: 'Input', icon: '⬜' },
-    { id: elementTypes.select, label: 'Select Box', icon: '☐' },
-    { id: elementTypes.textarea, label: 'Text Area', icon: '📝' },
-    { id: elementTypes.checkbox, label: 'Checkbox Headline', icon: '☑️' },
+    { id: elementTypes.facebook, label: 'Facebook Option', icon: 'f', disabled: true },
+    { id: elementTypes.input, label: 'Input', icon: '⬜', disabled: true },
+    { id: elementTypes.select, label: 'Select Box', icon: '☐', disabled: true },
+    { id: elementTypes.textarea, label: 'Text Area', icon: '📝', disabled: true },
+    { id: elementTypes.checkbox, label: 'Checkbox Headline', icon: '☑️', disabled: true },
   ],
   advanced: [
-    { id: elementTypes.smsSignup, label: 'SMS Sign Up', icon: '📱' },
-    { id: elementTypes.billing, label: 'Billing Info', icon: '💳' },
+    { id: elementTypes.smsSignup, label: 'SMS Sign Up', icon: '📱', disabled: true },
+    { id: elementTypes.billing, label: 'Billing Info', icon: '💳', disabled: true },
   ],
 }; 

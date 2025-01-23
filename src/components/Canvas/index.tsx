@@ -1,29 +1,29 @@
-import { useEditor } from "../contexts/EditorContext";
+import { useEditor } from "@/contexts/EditorContext";
 import { Plus, MoreVertical, Edit, Trash } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import Draggable from "react-draggable";
-import EditorDrawer from "./EditorDrawer";
-import { DrawerType } from "@/constants/layouts";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { elementTypes } from "@/constants/drawer";
 
-// Add this interface near the top of the file
 interface CanvasElement {
   id: string;
   content: string;
   type: string;
 }
 
-// Add these styles near the top of the file
 const selectedStyles = {
   section: "ring-2 ring-blue-500",
   row: "ring-2 ring-green-500",
@@ -35,12 +35,9 @@ function Canvas() {
   const [editingElement, setEditingElement] = useState<CanvasElement | null>(
     null
   );
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedDrawerType, setSelectedDrawerType] =
-    useState<DrawerType>(null);
 
   const handleAddRow = (
-    e: React.MouseEvent<HTMLDivElement>,
+    e: React.MouseEvent<HTMLButtonElement>,
     sectionId: string
   ) => {
     e.stopPropagation();
@@ -50,12 +47,20 @@ function Canvas() {
         selectedIds: { sectionId },
       },
     });
-    setSelectedDrawerType("row");
-    setDrawerOpen(true);
+
+    dispatch({
+      type: "SET_DRAWER_TYPE",
+      payload: {
+        drawerType: "row",
+      },
+    });
+    dispatch({
+      type: "OPEN_DRAWER",
+    });
   };
 
   const handleAddElement = (
-    e: React.MouseEvent<HTMLDivElement>,
+    e: React.MouseEvent<HTMLButtonElement>,
     sectionId: string,
     rowId: string,
     columnId: string
@@ -67,8 +72,15 @@ function Canvas() {
         selectedIds: { sectionId, rowId, columnId },
       },
     });
-    setSelectedDrawerType("element");
-    setDrawerOpen(true);
+    dispatch({
+      type: "SET_DRAWER_TYPE",
+      payload: {
+        drawerType: "element",
+      },
+    });
+    dispatch({
+      type: "OPEN_DRAWER",
+    });
   };
   const handleDeleteElement = (
     sectionId: string,
@@ -122,8 +134,6 @@ function Canvas() {
     }
   };
 
-  console.table(state);
-
   const handleBlockClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement;
     const sectionId = target.getAttribute("data-section-id");
@@ -137,7 +147,6 @@ function Canvas() {
     });
   };
 
-  // Add this helper function
   const getSelectedStyles = (
     type: "section" | "row" | "column",
     id: string
@@ -157,7 +166,7 @@ function Canvas() {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-100 p-4" id="canvas">
+      <div className="bg-gray-100 p-4 overflow-y-auto flex-1" id="canvas">
         {state.sections.map((section) => (
           <div
             key={section.id}
@@ -206,9 +215,38 @@ function Canvas() {
                       data-column-id={column.id}
                       data-row-id={row.id}
                       data-section-id={section.id}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        e.currentTarget.classList.add("bg-gray-100");
+                      }}
+                      onDragLeave={(e) => {
+                        e.currentTarget.classList.remove("bg-gray-100");
+                      }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        e.currentTarget.classList.remove("bg-gray-100");
+                        const elementType =
+                          e.dataTransfer.getData("elementType");
+                        if (elementType) {
+                          dispatch({
+                            type: "ADD_ELEMENT",
+                            payload: {
+                              sectionId: section.id,
+                              rowId: row.id,
+                              columnId: column.id,
+                              element: {
+                                id: `${elementType}-${Date.now()}`,
+                                type: elementType,
+                                content: "",
+                              },
+                            },
+                          });
+                        }
+                      }}
                     >
                       {column.elements.length === 0 && (
-                        <div className="flex justify-center items-center mb-4"
+                        <div
+                          className="flex justify-center items-center mb-4"
                           data-column-id={column.id}
                           data-row-id={row.id}
                           data-section-id={section.id}
@@ -226,14 +264,6 @@ function Canvas() {
                       )}
 
                       {column.elements.map((element) => (
-                        // <Draggable
-                        //   key={element.id}
-                        //   axis="both"
-                        //   handle=".drag-handle"
-                        //   defaultPosition={{ x: 0, y: 0 }}
-                        //   grid={[1, 1]}
-                        //   scale={1}
-                        // >
                         <div className="relative group bg-gray-50 p-2 mb-2 rounded">
                           <div className="drag-handle cursor-move">
                             {renderElement(element)}
@@ -282,7 +312,6 @@ function Canvas() {
                             </DropdownMenu>
                           </div>
                         </div>
-                        // </Draggable>
                       ))}
                     </div>
                   ))}
@@ -293,7 +322,6 @@ function Canvas() {
         ))}
       </div>
 
-      {/* Edit Element Dialog */}
       <Dialog
         open={!!editingElement}
         onOpenChange={() => setEditingElement(null)}
@@ -329,14 +357,6 @@ function Canvas() {
           <Button onClick={handleElementUpdate}>Save Changes</Button>
         </DialogContent>
       </Dialog>
-      <EditorDrawer
-        isOpen={drawerOpen}
-        onClose={() => {
-          setDrawerOpen(false);
-          setSelectedDrawerType(null);
-        }}
-        drawerType={selectedDrawerType}
-      />
     </>
   );
 }

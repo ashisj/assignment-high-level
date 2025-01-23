@@ -1,6 +1,7 @@
+import { DrawerType } from '@/constants/layouts';
 import { createContext, useContext, useReducer, ReactNode } from 'react';
 
-// Types for our website structure
+// Types
 export interface Element {
   id: string;
   type: string;
@@ -32,38 +33,68 @@ export interface SelectedIds {
 
 interface EditorState {
   sections: Section[];
-  selectedElement: string | null;
+  drawerType: string | null;
   selectedIds: SelectedIds;
+  openDrawer: boolean;
 }
 
 type EditorAction =
+| { type: 'SELECTED_IDS'; payload: { selectedIds: SelectedIds } }
+  | { type: 'OPEN_DRAWER' }
+  | { type: 'CLOSE_DRAWER' }
+  | { type: 'SET_DRAWER_TYPE'; payload: { drawerType: DrawerType } }
   | { type: 'ADD_SECTION'; payload: { sectionType: string } }
   | { type: 'ADD_ROW'; payload: { columns: number[], sectionId: string } }
   | { type: 'ADD_ELEMENT'; payload: { sectionId: string; rowId: string; columnId: string; element: Element } }
   | { type: 'DELETE_ELEMENT'; payload: { sectionId: string; rowId: string; columnId: string; elementId: string } }
-  | { type: 'SELECT_ELEMENT'; payload: { elementId: string | null } }
-  | { type: 'UPDATE_ELEMENT'; payload: { elementId: string; content: string } }
-  | { type: 'SELECTED_IDS'; payload: { selectedIds: SelectedIds } };
+  | { type: 'UPDATE_ELEMENT'; payload: { elementId: string; content: string } };
+  
 
 const tempData: Section[] = [
   {
     id: 'section-1',
-    type: 'blank',
+    type: 'content',
     rows: [],
   },
 ]   
 const initialState: EditorState = {
   sections: tempData,
-  selectedElement: null,
+  drawerType: null,
   selectedIds: {
     sectionId: 'section-1',
     rowId: null,
     columnId: null
-  }
+  },
+  openDrawer: false,
 };
 
 function editorReducer(state: EditorState, action: EditorAction): EditorState {
   switch (action.type) {
+    case 'SELECTED_IDS':
+      return {
+        ...state,
+        selectedIds: {
+          ...state.selectedIds,
+          ...action.payload.selectedIds
+        }
+      };
+    case 'OPEN_DRAWER':
+      return {
+        ...state,
+        openDrawer: true,
+      };
+    
+    case 'CLOSE_DRAWER':
+      return {
+        ...state,
+        openDrawer: false,
+      };
+    case 'SET_DRAWER_TYPE':
+      return {
+        ...state,
+        drawerType: action.payload.drawerType,
+      };
+
     case 'ADD_SECTION':
       return {
         ...state,
@@ -146,11 +177,7 @@ function editorReducer(state: EditorState, action: EditorAction): EditorState {
         ),
       };
 
-    case 'SELECT_ELEMENT':
-      return {
-        ...state,
-        selectedElement: action.payload.elementId,
-      };
+    
 
     case 'UPDATE_ELEMENT':
       return {
@@ -172,14 +199,7 @@ function editorReducer(state: EditorState, action: EditorAction): EditorState {
       };
 
     
-    case 'SELECTED_IDS':
-      return {
-        ...state,
-        selectedIds: {
-          ...state.selectedIds,
-          ...action.payload.selectedIds
-        }
-      };
+    
     default:
       return state;
   }
