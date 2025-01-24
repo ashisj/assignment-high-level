@@ -30,20 +30,24 @@ const selectedStyles = {
   column: "ring-2 ring-purple-500",
 };
 
+type BlockType = "section" | "row" | "column" | "element";
+
+interface DragItem {
+  type: BlockType;
+  sectionId: string;
+  sectionIndex: number;
+  rowId?: string;
+  rowIndex?: number;
+  columnId?: string;
+  columnIndex?: number;
+  elementId?: string;
+  elementIndex?: number;
+}
+
 function Canvas() {
   const { state, dispatch } = useEditor();
   const [editingElement, setEditingElement] = useState<CanvasElement | null>(null);
-  const [draggedItem, setDraggedItem] = useState<{
-    type: "section" | "row" | "column" | "element";
-    sectionId: string;
-    sectionIndex: number;
-    rowId?: string;
-    rowIndex?: number;
-    columnId?: string;
-    columnIndex?: number;
-    elementId?: string;
-    elementIndex?: number;
-  } | null>(null);
+  const [draggedItem, setDraggedItem] = useState<DragItem | null>(null);
 
   const handleAddRow = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -139,7 +143,7 @@ function Canvas() {
 
   const handleDragStart = (
     e: React.DragEvent,
-    type: string,
+    type: BlockType,
     sectionId: string,
     sectionIndex: number,
     rowId?: string,
@@ -150,7 +154,17 @@ function Canvas() {
     elementIndex?: number
   ) => {
     e.stopPropagation();
-    setDraggedItem({ type, sectionId, sectionIndex, rowId, rowIndex, columnId, columnIndex, elementId, elementIndex });
+    setDraggedItem({ 
+      type, 
+      sectionId, 
+      sectionIndex, 
+      rowId, 
+      rowIndex, 
+      columnId, 
+      columnIndex, 
+      elementId, 
+      elementIndex 
+    });
     e.dataTransfer.setData(
       "text/plain",
       JSON.stringify({ type, sectionId, sectionIndex, rowId, rowIndex, columnId, columnIndex, elementId, elementIndex })
@@ -169,11 +183,8 @@ function Canvas() {
   const handleDrop = (
     e: React.DragEvent,
     targetType: string,
-    targetSectionId: string,
     targetSectionIndex: number,
-    targetRowId: string,
     targetRowIndex: number,
-    targetColumnId: string,
     targetColumnIndex: number
   ) => {
     e.preventDefault();
@@ -207,7 +218,7 @@ function Canvas() {
             onDragStart={(e) => handleDragStart(e, "section", section.id, sectionIndex)}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
-            onDrop={(e) => handleDrop(e, "section", section.id, sectionIndex)}
+            onDrop={(e) => handleDrop(e, "section", sectionIndex)}
             className={`mb-8 bg-white rounded-lg shadow-lg p-4 transition-all ${
               draggedItem?.sectionId === section.id ? "opacity-50" : ""
             } ${getSelectedStyles("section", section.id)}`}
@@ -230,7 +241,7 @@ function Canvas() {
                 onDragStart={(e) => handleDragStart(e, "row", section.id, sectionIndex, row.id, rowIndex)}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, "row", section.id, sectionIndex, row.id, rowIndex)}
+                onDrop={(e) => handleDrop(e, "row", sectionIndex, rowIndex)}
                 className={`mb-4 p-4 transition-all ${
                   draggedItem?.rowId === row.id ? "opacity-50" : ""
                 } ${getSelectedStyles("row", row.id)}`}
@@ -275,7 +286,7 @@ function Canvas() {
                             },
                           });
                         } else {
-                          handleDrop(e, "column", section.id, sectionIndex, row.id, rowIndex, column.id, columnIndex);
+                          handleDrop(e, "column", sectionIndex, rowIndex, columnIndex);
                         }
                       }}
                       className={`flex-1 min-h-[100px] border-2 border-dashed border-gray-300 rounded p-4  s relative transition-all ${
