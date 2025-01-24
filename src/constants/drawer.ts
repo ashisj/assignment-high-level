@@ -128,7 +128,7 @@ export const elementConfigs: { [key: string]: Element[] } = {
     { id: elementTypes.headline, label: 'Headline', icon: 'H', iconClass: 'font-serif' },
     { id: elementTypes.subheadline, label: 'Sub-headline', icon: 'A', iconClass: 'font-serif' },
     { id: elementTypes.paragraph, label: 'Paragraph', icon: '¶' },
-    { id: elementTypes.bulletList, label: 'Bullet List', icon: '•' },
+    { id: elementTypes.bulletList, label: 'Bullet List', icon: '•', iconClass: 'text-xl' },
   ],
   media: [
     { id: elementTypes.image, label: 'Image', icon: '🖼️' },

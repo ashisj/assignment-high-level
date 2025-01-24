@@ -1,13 +1,9 @@
 import { useEditor } from "@/contexts/EditorContext";
-import {
-  sectionLayouts,
-  rowLayouts,
-  columnLayouts
-} from "@/constants/drawer";
+import { sectionLayouts, rowLayouts, columnLayouts } from "@/constants/drawer";
 import LayoutCard from "./LayoutCard";
 import RowLayoutButton from "./RowLayoutButton";
-
 import ElementContent from "./ElementContent";
+import { X } from "lucide-react";
 
 function EditorDrawer() {
   const { state, dispatch } = useEditor();
@@ -65,10 +61,18 @@ function EditorDrawer() {
 
   return (
     <div className="w-[400px] p-4 overflow-y-auto" id="drawer">
-      <div className="text-2xl font-bold">
-        {`Add New ${
-          state.drawerType.charAt(0).toUpperCase() + state.drawerType.slice(1)
-        }`}
+      <div className="flex justify-between items-center">
+        <div className="text-2xl font-bold">
+          {`Add New ${
+            state.drawerType.charAt(0).toUpperCase() + state.drawerType.slice(1)
+          }`}
+        </div>
+        <button
+          onClick={() => dispatch({ type: "CLOSE_DRAWER" })}
+          className="p-1 hover:bg-gray-100 rounded-full"
+        >
+          <X className="w-4 h-4" />
+        </button>
       </div>
       {state.drawerType === "section" && (
         <div className="mt-4 grid grid-cols-1 gap-4 ">

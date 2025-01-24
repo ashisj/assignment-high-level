@@ -33,9 +33,9 @@ export interface PreviewMenuItem extends NavButton {
 export type DrawerType = "section" | "row" | "column" | "element" | null;
 
 export const LeftNavButtons: NavButton[] = [
-  { icon: ArrowLeft, label: "Back" },
-  { icon: Laptop, label: "Desktop" },
-  { icon: TabletSmartphone, label: "Mobile" },
+  //   { icon: ArrowLeft, label: "Back" },
+  //   { icon: Laptop, label: "Desktop" },
+  //   { icon: TabletSmartphone, label: "Mobile" },
 ];
 
 export const EditorMenuItems: MenuItem[] = [
@@ -45,7 +45,7 @@ export const EditorMenuItems: MenuItem[] = [
     type: "section",
     menuItems: [
       { label: "Add section", action: "add" },
-    //   { label: "Manage sections", action: "manage" },
+      //   { label: "Manage sections", action: "manage" },
     ],
   },
   {
@@ -54,7 +54,7 @@ export const EditorMenuItems: MenuItem[] = [
     type: "row",
     menuItems: [
       { label: "Add row", action: "add" },
-    //   { label: "Manage rows", action: "manage" },
+      //   { label: "Manage rows", action: "manage" },
     ],
   },
   {
@@ -63,7 +63,7 @@ export const EditorMenuItems: MenuItem[] = [
     type: "column",
     menuItems: [
       { label: "Add column", action: "add" },
-    //   { label: "Manage columns", action: "manage" },
+      //   { label: "Manage columns", action: "manage" },
     ],
   },
   {
@@ -72,7 +72,7 @@ export const EditorMenuItems: MenuItem[] = [
     type: "element",
     menuItems: [
       { label: "Add element", action: "add" },
-    //   { label: "Manage elements", action: "manage" },
+      //   { label: "Manage elements", action: "manage" },
     ],
   },
 ];
@@ -80,20 +80,12 @@ export const EditorMenuItems: MenuItem[] = [
 export const UtilityMenuItems: PreviewMenuItem[] = [
   {
     icon: Eye,
-    label: "Preview",
-    menuItems: [
-      { label: "Desktop view" },
-      { label: "Mobile view" },
-      { label: "Tablet view" },
-    ],
+    label: "",
+    menuItems: [],
   },
   {
     icon: Save,
-    label: "Save",
-    menuItems: [
-      { label: "Save changes" },
-      { label: "Save as draft" },
-      { label: "Save as template" },
-    ],
+    label: "",
+    menuItems: [],
   },
-]; 
+];
