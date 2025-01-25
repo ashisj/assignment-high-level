@@ -5,7 +5,13 @@ A drag-and-drop website builder that allows users to create websites by adding s
 ## Demo
 
 ![Demo](demo.png)
+
 ![Demo](https://drive.google.com/file/d/1dAUuaOakPh0DiT1eS2cy6y1oVHVOQN_p/view?usp=drive_link)
+
+### Demo Video
+
+<iframe width="560" height="315" src="https://drive.google.com/file/d/1dAUuaOakPh0DiT1eS2cy6y1oVHVOQN_p/view?usp=drive_link" frameborder="0" allowfullscreen></iframe>
+
 
 ## Features
 
