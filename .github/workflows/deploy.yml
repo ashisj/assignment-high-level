@@ -32,3 +32,4 @@ jobs:
 
       - name: Cleanup
         run: rm -rf dist
+        
