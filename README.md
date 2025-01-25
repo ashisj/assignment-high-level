@@ -2,15 +2,53 @@
 
 A drag-and-drop website builder that allows users to create websites by adding sections, rows, columns, and various elements.
 
+## Demo
+
+![Demo](demo.png)
+![Demo](https://drive.google.com/file/d/1dAUuaOakPh0DiT1eS2cy6y1oVHVOQN_p/view?usp=drive_link)
+
 ## Features
 
-- Drag and drop interface
-- Section management
-- Row layouts
-- Column configurations
-- Various element types (text, images, buttons, etc.)
-- Responsive design
-- Live editing
+- **Sections**: Main container blocks
+  - Add new sections
+  - Drag to reorder sections
+  - Delete sections
+
+- **Rows**: Container within sections
+  - Add rows with predefined column layouts
+  - Drag to reorder rows
+  - Delete rows
+
+- **Columns**: Container within rows
+  - Support for different width configurations
+  - Drag to reorder columns
+  - Delete columns
+
+- **Elements**: Content blocks
+  - Text elements (Headings, Paragraphs)
+  - Media elements (Images)
+  - Form elements (Input fields, Buttons)
+  - Advanced elements
+
+### Drag and Drop
+- Drag and drop functionality for:
+  - Sections
+  - Rows
+  - Columns
+  - Elements
+- Visual drop zones for accurate placement
+
+### Element Library
+- Categorized element picker:
+  - Text
+  - Media
+  - Form
+  - Advanced
+- Search functionality to filter elements
+
+### State Management
+- Save/Load functionality using localStorage
+- State persistence across page reloads
 
 ## Prerequisites
 
