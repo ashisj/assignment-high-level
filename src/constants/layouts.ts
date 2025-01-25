@@ -4,9 +4,9 @@ import {
   Menu,
   Columns3,
   CodeXml,
-  ArrowLeft,
-  Laptop,
-  TabletSmartphone,
+  // ArrowLeft,
+  // Laptop,
+  // TabletSmartphone,
   Save,
   Eye,
 } from "lucide-react";
@@ -14,6 +14,7 @@ import {
 export interface NavButton {
   icon: LucideIcon;
   label: string;
+  key: string;
 }
 
 export interface MenuItem extends NavButton {
@@ -40,6 +41,7 @@ export const LeftNavButtons: NavButton[] = [
 
 export const EditorMenuItems: MenuItem[] = [
   {
+    key: "section",
     icon: Maximize,
     label: "Sections",
     type: "section",
@@ -49,6 +51,7 @@ export const EditorMenuItems: MenuItem[] = [
     ],
   },
   {
+    key: "row",
     icon: Menu,
     label: "Rows",
     type: "row",
@@ -58,6 +61,7 @@ export const EditorMenuItems: MenuItem[] = [
     ],
   },
   {
+    key: "column",
     icon: Columns3,
     label: "Columns",
     type: "column",
@@ -67,6 +71,7 @@ export const EditorMenuItems: MenuItem[] = [
     ],
   },
   {
+    key: "element",
     icon: CodeXml,
     label: "Elements",
     type: "element",
@@ -77,15 +82,7 @@ export const EditorMenuItems: MenuItem[] = [
   },
 ];
 
-export const UtilityMenuItems: PreviewMenuItem[] = [
-  {
-    icon: Eye,
-    label: "",
-    menuItems: [],
-  },
-  {
-    icon: Save,
-    label: "",
-    menuItems: [],
-  },
+export const RightNavButtons: NavButton[] = [
+    { icon: Eye, label: "", key: "preview" },
+    { icon: Save, label: "", key: "save" },
 ];

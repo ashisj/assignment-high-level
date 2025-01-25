@@ -13,7 +13,7 @@ import {
   LeftNavButtons,
   EditorMenuItems,
   DrawerType,
-  UtilityMenuItems,
+  RightNavButtons,
 } from "../constants/layouts";
 import { useEditor } from "@/contexts/EditorContext";
 
@@ -30,14 +30,8 @@ interface MenuItem extends NavButton {
   }[];
 }
 
-interface PreviewMenuItem extends NavButton {
-  menuItems: {
-    label: string;
-  }[];
-}
-
-const NavbarButton = ({ icon: Icon, label }: NavButton) => (
-  <Button variant="ghost" className="text-gray-500 px-3 h-10">
+const NavbarButton = ({ icon: Icon, label, onClick }: NavButton & { onClick: (label: string) => void }  ) => (
+  <Button variant="ghost" className="text-gray-500 px-3 h-10" onClick={() => onClick(label)}  >
     <Icon size={20} />
     {label}
   </Button>
@@ -72,22 +66,15 @@ const EditorMenuItem = ({
   </MenubarMenu>
 );
 
-const UtilityMenuItem = ({ icon: Icon, label, menuItems }: PreviewMenuItem) => (
-  <MenubarMenu>
-    <MenubarTrigger className="text-gray-500">
-      <Icon size={20} />
-      {label}
-    </MenubarTrigger>
-    <MenubarContent>
-      {menuItems.map((item) => (
-        <MenubarItem key={item.label}>{item.label}</MenubarItem>
-      ))}
-    </MenubarContent>
-  </MenubarMenu>
-);
-
 function Navbar() {
-  const { dispatch } = useEditor();
+  const { dispatch, saveState } = useEditor();
+  
+  const handleClick = (key: string) => {
+    console.log("clicked", key);
+    if (key === "save") {
+      saveState();
+    }
+  };
 
   const handleMenuItemClick = (type: DrawerType) => {
     dispatch({ type: "SET_DRAWER_TYPE", payload: { drawerType: type } });
@@ -99,7 +86,7 @@ function Navbar() {
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-0">
           {LeftNavButtons.map((button) => (
-            <NavbarButton key={button.label} {...button} />
+            <NavbarButton key={button.label} {...button} onClick={() => {}} />
           ))}
         </div>
       </div>
@@ -108,15 +95,14 @@ function Navbar() {
         <Menubar>
           {EditorMenuItems.map((item) => (
             <EditorMenuItem
-              key={item.label}
               {...item}
               onMenuItemClick={handleMenuItemClick}
             />
           ))}
         </Menubar>
         <Menubar>
-          {UtilityMenuItems.map((item) => (
-            <UtilityMenuItem key={item.label} {...item} />
+          {RightNavButtons.map((item) => (
+            <NavbarButton {...item} onClick={() => handleClick(item.key)} />
           ))}
         </Menubar>
       </div>

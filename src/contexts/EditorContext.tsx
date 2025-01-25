@@ -1,5 +1,5 @@
 import { DrawerType } from "@/constants/layouts";
-import { createContext, useContext, useReducer, ReactNode } from "react";
+import { createContext, useContext, useReducer, ReactNode, useCallback } from "react";
 
 // Types
 export interface Element {
@@ -79,6 +79,18 @@ type EditorAction =
       };
     };
 
+const STORAGE_KEY = 'editor_state';
+
+const loadFromStorage = (): EditorState | null => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : null;
+  } catch (error) {
+    console.error('Failed to load editor state:', error);
+    return null;
+  }
+};
+
 const tempData: Section[] = [
   {
     id: "section-1",
@@ -86,7 +98,8 @@ const tempData: Section[] = [
     rows: [],
   },
 ];
-const initialState: EditorState = {
+
+const initialState: EditorState = loadFromStorage() || {
   sections: tempData,
   drawerType: null,
   selectedIds: {
@@ -320,13 +333,22 @@ function editorReducer(state: EditorState, action: EditorAction): EditorState {
 const EditorContext = createContext<{
   state: EditorState;
   dispatch: React.Dispatch<EditorAction>;
+  saveState: () => void;
 } | null>(null);
 
 export function EditorProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(editorReducer, initialState);
 
+  const saveState = useCallback(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (error) {
+      console.error('Failed to save editor state:', error);
+    }
+  }, [state]);
+
   return (
-    <EditorContext.Provider value={{ state, dispatch }}>
+    <EditorContext.Provider value={{ state, dispatch, saveState }}>
       {children}
     </EditorContext.Provider>
   );
